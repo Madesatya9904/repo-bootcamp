@@ -110,7 +110,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 <Link
                   href="/"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname === "/" && "bg-graydark dark:bg-meta-4"
+                    pathname && pathname === "/" && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
                   <svg
@@ -148,7 +148,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 <Link
                   href="/user"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("user") && "bg-graydark dark:bg-meta-4"
+                    pathname && pathname.includes("user") && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
                   <svg
@@ -178,7 +178,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 <Link
                   href="/category"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("category") &&
+                    pathname && pathname.includes("category") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
@@ -205,7 +205,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 <Link
                   href="/product"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("product") && "bg-graydark dark:bg-meta-4"
+                    pathname && pathname.includes("product") && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
                   <svg
@@ -232,7 +232,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 <Link
                   href="/order"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("order") && "bg-graydark dark:bg-meta-4"
+                   pathname && pathname.includes("order") && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
                   <svg

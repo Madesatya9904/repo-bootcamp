@@ -9,8 +9,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -24,43 +25,9 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  products Product[]
-  orders   Order[]
+  orders Order[]
 
   @@map("users")
-}
-
-model Product {
-  id          String  @id @default(uuid())
-  title       String
-  price       Int
-  description String?
-  category_id String
-  user_id     String
-  company     String
-  stock       Int
-  shipping    Boolean @default(false)
-  featured    Boolean @default(false)
-  colors      Json
-  images      Json
-
-  category Category @relation(fields: [category_id], references: [id])
-  user     User     @relation(fields: [user_id], references: [id])
-
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  order_items OrderItems[]
-
-  @@map("products")
-}
-
-model Category {
-  id   String @id @default(uuid())
-  name String
-
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  products   Product[]
 }
 
 model Order {
@@ -82,12 +49,12 @@ model Order {
 
 model OrderItems {
   id         String @id @default(uuid())
-  product_id String
+  tumbler_id String
   order_id   String
   quantity   Int
   color      String
 
-  product Product @relation(fields: [product_id], references: [id])
+  tumbler Tumbler @relation(fields: [tumbler_id], references: [id])
   order   Order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
 
   created_at DateTime @default(now())
@@ -99,4 +66,57 @@ model OrderItems {
 enum UserRole {
   ADMIN
   CUSTOMER
+}
+
+model Tumbler {
+  id          String      @id @default(uuid())
+  category_id String
+  images      Json
+  name        String
+  brand       String
+  stock       Int
+  color       Json
+  price       Int
+  shipping    Boolean     @default(false)
+  featured    Boolean     @default(false)
+  desc        String?
+  type        TypeTumbler @default(Sedang)
+
+  category    Category     @relation(fields: [category_id], references: [id])
+  order_items OrderItems[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("tumblers")
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String
+
+  tumblers Tumbler[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("categorys")
+}
+
+model File {
+  id String @id @default(uuid())
+
+  filename String
+  fileblob Bytes
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("files")
+}
+
+enum TypeTumbler {
+  Besar
+  Sedang
+  Kecil
 }

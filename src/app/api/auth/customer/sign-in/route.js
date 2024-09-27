@@ -2,7 +2,6 @@ import { compareSync } from "bcrypt";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { use } from "react";
 
 export async function POST(req, res) {
   try {
@@ -15,21 +14,22 @@ export async function POST(req, res) {
     });
 
     if (!user) {
-      return new NextResponse("User not found", {status:404})
+      return NextResponse.json(
+        {
+          message: "User does not exist",
+        },
+        {
+          status: 400,
+        },
+      );
     }
 
     if (!compareSync(password, user.password)) {
       return new NextResponse("Password is incorrect", { status: 401 });
     }
 
-    if (user.role !== "ADMIN") {
-      return new NextResponse("You are not authorized to access this route", {
-        status: 401,
-      });
-    }
-
-    const token = jwt.sign({ id: user.id}, process.env.JWT_ACCESS_KEY, {
-      expiresIn: "10d",
+    const token = jwt.sign({ id: user.id }, process.env.JWT_ACCESS_KEY, {
+      expiresIn: "7d",
     });
 
     await db.user.update({

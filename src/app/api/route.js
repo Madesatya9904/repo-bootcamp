@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
+import { db } from "../../lib/db.js";
 
-export async function GET(req) {
-  return NextResponse.json({
-    title: "Bootcamp Backednd API",
-    message: "Hello World!",
-  });
+export async function POST(req) {
+  
 }

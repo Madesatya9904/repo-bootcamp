@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 export default async function ProductPage() {
-  const products = await db.product.findMany({
+  const tumbler = await db.tumbler.findMany({
     include: {
       category: true,
     },
@@ -18,8 +18,7 @@ export default async function ProductPage() {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Product" />
-      <Table products={products} />
+      <Table tumbler={tumbler} />
     </DefaultLayout>
   );
 }

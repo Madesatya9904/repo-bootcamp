@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 
 export default function Form() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false)
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -16,21 +17,31 @@ export default function Form() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setIsLoading(true)
 
     try {
-      const { data } = await axios.post("/api/auth/sign-in", {
-        email: form.email,
-        password: form.password,
-      });
 
-      Cookies.set("currentUser", data.token);
-      router.push("/");
+      if (!isLoading) {
+        const { data } = await axios.post("/api/auth/sign-in", {
+          email: form.email,
+          password: form.password,
+        });
+  
+        Cookies.set("currentUser", data.token);
+        router.push("/");
+      }      
     } catch (err) {
+      console.log(err)
+      
       Swal.fire({
-        title: "Error",
+        title: "Fail",
         text: err?.response?.data || "Internal Server Error",
         icon: "error",
       });
+
+
+    } finally {
+      setIsLoading(false)
     }
   }
 

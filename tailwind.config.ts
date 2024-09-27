@@ -19,6 +19,10 @@ const config: Config = {
       ...defaultTheme.screens,
     },
     extend: {
+      fontFamily: {
+        // Menambahkan font mono kustom
+        mono: ['"Roboto Mono"', 'monospace'], // Ganti "Roboto Mono" dengan font mono yang Anda inginkan
+      },
       colors: {
         current: "currentColor",
         transparent: "transparent",

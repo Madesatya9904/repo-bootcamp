@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        hostname: "localhost"
+      }
+    ]
+  },
   async headers() {
     return [
       {
@@ -10,7 +17,7 @@ const nextConfig = {
           // Allow for specific domains to have access or * for all
           {
             key: "Access-Control-Allow-Origin",
-            value: "*",
+            value: process.env.MY_DOMAIN || "http://localhost:3000",
             // DOES NOT WORK
             // value: process.env.ALLOWED_ORIGIN,
           },

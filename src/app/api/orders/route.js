@@ -17,11 +17,11 @@ export async function POST(req) {
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
 
     // Ambil semua data dari body request
-    const { address, postal_code, payment_method, country, products } =
+    const { address, postal_code, payment_method, country, tumbler } =
       await req.json();
 
     // Cek apakah user memasukan products
-    if (products.length === 0) {
+    if (tumbler.length === 0) {
       return new NextResponse("Please add at least one product", {
         status: 400,
       });
@@ -29,8 +29,8 @@ export async function POST(req) {
 
     const transaction = await db.$transaction(async (tx) => {
       // Iterasi melalui setiap produk dan memeriksa stok
-      for (const product of products) {
-        const existingProduct = await tx.product.findUnique({
+      for (const product of tumbler) {
+        const existingProduct = await tx.tumbler.findUnique({
           where: {
             id: product.id,
           },
@@ -42,7 +42,7 @@ export async function POST(req) {
           throw error;
         }
 
-        if (!existingProduct.colors.includes(product.color)) {
+        if (!existingProduct.color.includes(product.color)) {
           const error = new Error(
             "Color what you want is not available on this product",
           );
@@ -73,17 +73,17 @@ export async function POST(req) {
 
       // Buat entri pesanan untuk setiap produk
       const orderItems = await tx.orderItems.createMany({
-        data: products.map((product) => ({
+        data: tumbler.map((product) => ({
           order_id: order.id,
-          product_id: product.id,
+          tumbler_id: product.id,
           quantity: product.quantity,
           color: product.color,
         })),
       });
 
       // Kurangi stok dari setiap produk yang dipesan
-      for (const product of products) {
-        await tx.product.update({
+      for (const product of tumbler) {
+        await tx.tumbler.update({
           where: { id: product.id },
           data: {
             stock: {
@@ -132,7 +132,7 @@ export async function GET(req) {
       include: {
         order_items: {
           include: {
-            product: true,
+            tumbler: true,
           },
         },
         user: user.role === "ADMIN" ? true : false,

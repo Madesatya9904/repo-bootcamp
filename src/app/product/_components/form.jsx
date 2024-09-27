@@ -7,21 +7,21 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
-export default function Form({ categories }) {
+export default function Form({ product, categories }) {
   const token = Cookies.get("currentUser");
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [form, setForm] = useState({
-    title: "",
-    price: 0,
-    description: "",
-    category_id: "",
-    company: "",
-    stock: 0,
-    shipping: false,
-    featured: false,
-    colors: ["#000"],
+  const [form, setForm] = useState(product ? product :{
+    name: "",
+    price:  0,
+    desc:  "",
+    category_id:  "",
+    brand:  "",
+    stock:  0,
+    shipping:  false,
+    featured:  false,
+    color:  ["#000000"],
     images: [],
   });
 
@@ -51,17 +51,45 @@ export default function Form({ categories }) {
     };
 
     try {
-      const response = await axios.post(
-        "/api/products",
-        {
-          ...form,
-          featured: JSON.parse(form.featured),
-          shipping: JSON.parse(form.shipping),
-        },
-        {
-          headers,
-        },
-      );
+      if (product) {
+        const respone = await axios.patch(
+          `/api/products/${product.id}`,
+          {
+            name: form.name,
+            price: form.price,
+            desc: form.desc,
+            category_id: form.category_id,
+            brand: form.brand,
+            stock: form.stock,
+            shipping: form.shipping,
+            featured: form.featured,
+            color: form.color,
+            images: form.images,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token}`,
+            },
+          },
+        );
+        console.log("berhasil", respone);
+      } else {
+        const response = await axios.post(
+          "/api/products",
+          {
+            ...form,
+            price: parseInt(form.price, 10), // Mengubah string menjadi integer
+            stock: parseInt(form.stock, 10), // Mengubah string menjadi integer
+            featured: JSON.parse(form.featured),
+            shipping: JSON.parse(form.shipping),
+          },
+          {
+            headers,
+          },
+        );
+        console.log(response);
+      }
 
       router.push("/product");
       router.refresh();
@@ -98,6 +126,7 @@ export default function Form({ categories }) {
         images: [...form.images, ...data.images],
       });
     } catch (error) {
+      console.log(error)
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -132,11 +161,11 @@ export default function Form({ categories }) {
   }
 
   function handleOnChangeColor(e, i) {
-    const newColors = [...form.colors];
+    const newColors = [...form.color];
     newColors[i] = e.target.value;
     setForm({
       ...form,
-      colors: newColors,
+      color: newColors,
     });
   }
 
@@ -155,14 +184,14 @@ export default function Form({ categories }) {
               <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                 <div className="w-full xl:w-1/2">
                   <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Title
+                    Name
                   </label>
                   <input
                     required
                     type="text"
-                    name="title"
+                    name="name"
                     onChange={handleOnChange}
-                    value={form.title}
+                    value={form.name}
                     placeholder="Title"
                     disabled={isLoading}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
@@ -205,15 +234,15 @@ export default function Form({ categories }) {
 
                 <div className="w-full xl:w-1/2">
                   <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Company
+                    Brand
                   </label>
                   <input
                     required
                     disabled={isLoading}
                     type="text"
-                    placeholder="Company"
-                    name="company"
-                    value={form.company}
+                    placeholder="Brand"
+                    name="brand"
+                    value={form.brand}
                     onChange={handleOnChange}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
@@ -228,6 +257,7 @@ export default function Form({ categories }) {
                   required
                   disabled={isLoading}
                   value={form.category_id}
+                  defaultChecked={form.category_id}
                   name="category_id"
                   onChange={handleOnChange}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
@@ -290,7 +320,7 @@ export default function Form({ categories }) {
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   >
                     <option
-                      value={true}
+                      value={"true"}
                       className="text-body dark:text-bodydark"
                     >
                       Yes
@@ -307,16 +337,16 @@ export default function Form({ categories }) {
 
               <div className="mb-4.5">
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Colors
+                  Color
                 </label>
                 <div className="flex items-center gap-x-3">
-                  {form.colors.map((color, index) => (
+                  {form.color.map((colors, index) => (
                     <input
                       required
                       disabled={isLoading}
                       key={index}
                       type="color"
-                      value={color}
+                      value={colors}
                       onChange={(e) => handleOnChangeColor(e, index)}
                       className="cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:px-5 file:py-3 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
                     />
@@ -324,26 +354,26 @@ export default function Form({ categories }) {
                   <button
                     type="button"
                     disabled={isLoading}
-                    onClick={() =>
-                      setForm((prev) => ({
-                        ...prev,
-                        colors: [...prev.colors, "#000"],
-                      }))
-                    }
+                    onClick={() => {
+                      setForm({
+                        ...form,
+                        color: [...form.color, "#000000"],
+                      });
+                    }}
                     className="rounded bg-primary px-3 py-1 font-medium text-white hover:bg-opacity-90"
                   >
                     Add
                   </button>
-                  {form.colors.length > 1 && (
+                  {form.color.length > 1 && (
                     <button
                       disabled={isLoading}
                       onClick={() => {
-                        if (form.colors.length !== 1) {
+                        if (form.color.length !== 1) {
                           setForm({
                             ...form,
-                            colors: [...form.colors].slice(
+                            color: [...form.color].slice(
                               0,
-                              form.colors.length - 1,
+                              form.color.length - 1,
                             ),
                           });
                         }
@@ -377,8 +407,8 @@ export default function Form({ categories }) {
                 <textarea
                   disabled={isLoading}
                   rows={6}
-                  name="description"
-                  value={form.description}
+                  name="desc"
+                  value={form.desc}
                   onChange={handleOnChange}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 ></textarea>
@@ -399,7 +429,7 @@ export default function Form({ categories }) {
           <div key={i} className="relative aspect-square rounded-md bg-white">
             <Image
               fill
-              src={`/uploads/${image}`}
+              src={`http://localhost:8000/api/images/${image}`}
               alt="Preview"
               className="rounded-md object-cover"
             />
