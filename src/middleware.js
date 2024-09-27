@@ -4,7 +4,7 @@ export function middleware(request){
   if(request.nextUrl.pathname.startsWith("/api/")) {
     const respone = NextResponse.next()
 
-    respone.headers.set("Access-Control-Allow-Origin", "*");
+    respone.headers.set("Access-Control-Allow-Origin", process.env.MY_DOMAIN || "*");
     respone.headers.set(
       "Access-Control-Allow-Methods",
       "GET, POST, PUT, DELETE, OPTIONS"
