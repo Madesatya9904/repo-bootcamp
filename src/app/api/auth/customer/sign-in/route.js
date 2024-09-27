@@ -42,7 +42,7 @@ export async function POST(req, res) {
     });
 
     delete user.password;
-    delete user.access_token;
+    
 
     return NextResponse.json({
       ...user,
