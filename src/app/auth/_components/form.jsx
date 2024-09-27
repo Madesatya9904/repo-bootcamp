@@ -28,6 +28,7 @@ export default function Form() {
         });
   
         Cookies.set("currentUser", data.token);
+        router.prefetch("/")
         router.push("/");
       }      
     } catch (err) {
