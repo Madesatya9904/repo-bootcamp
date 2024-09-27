@@ -3,6 +3,8 @@ import "@/css/style.css";
 import "flatpickr/dist/flatpickr.min.css";
 import "jsvectormap/dist/css/jsvectormap.css";
 
+export const revalidate = 0
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
