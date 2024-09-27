@@ -21,6 +21,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Setup .env file
+        run : |
+          echo "DATABASE_URL=$DATABASE_URL" >> .env
+          echo "DIRECT_URL=$DIRECT_URL" >> .env
+          echo "JWT_ACCESS_KEY=$JWT_ACCESS_KEY" >> .env
+        env : 
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          JWT_ACCESS_KEY: ${{ secrets.JWT_ACCESS_KEY }}
+
       - name: Build the application
         run: npm run build
 

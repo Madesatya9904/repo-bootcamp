@@ -1,4 +1,4 @@
-import Form from "@/app/user/_components/form";
+import Form from "../_components/form";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { db } from "@/lib/db";

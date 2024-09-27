@@ -12,7 +12,7 @@ import { IoCreateOutline } from "react-icons/io5";
 import { CiWarning } from "react-icons/ci";
 import { MdUpdate } from "react-icons/md";
 
-const form = ({ user }) => {
+const Form = ({ user }) => {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(FaEyeSlash);
@@ -269,4 +269,4 @@ const form = ({ user }) => {
   );
 };
 
-export default form;
+export default Form;
