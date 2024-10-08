@@ -70,7 +70,7 @@ enum UserRole {
 
 model Tumbler {
   id          String      @id @default(uuid())
-  category_id String
+  category_id String?
   images      Json
   name        String
   brand       String
@@ -82,7 +82,7 @@ model Tumbler {
   desc        String?
   type        TypeTumbler @default(Sedang)
 
-  category    Category     @relation(fields: [category_id], references: [id])
+  category    Category?     @relation(fields: [category_id], references: [id], onDelete: SetNull)
   order_items OrderItems[]
 
   created_at DateTime @default(now())
