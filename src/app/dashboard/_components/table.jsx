@@ -188,7 +188,7 @@ const Page = ({ categories, products, orders, users }) => {
           </div>
           <div className="flex flex-col items-center justify-center rounded-2xl bg-[#1C2434] dark:bg-white px-5 py-6 text-center">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl text-white dark:text-black">Product's</h1>
+              <h1 className="text-2xl text-white dark:text-black">Product&apos;s</h1>
               <div className="rounded-lg bg-white dark:bg-[#1C2434] p-[2px]">
                 <CiShoppingTag className="text-lg text-sky-500 dark:text-white" />
               </div>
@@ -199,13 +199,13 @@ const Page = ({ categories, products, orders, users }) => {
                 <FaAngleDoubleUp className="text-lg text-sky-500" />
               </div>
               <span className="text-sm text-[#F6F4EB] dark:text-black">
-                Total Product's on Sale!
+                Total Product&apos;s on Sale!
               </span>
             </div>
           </div>
           <div className="flex flex-col items-center justify-center rounded-2xl bg-[#1C2434] dark:bg-white px-5 py-6 text-center">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl text-white dark:text-black">User's</h1>
+              <h1 className="text-2xl text-white dark:text-black">User&apos;s</h1>
               <div className="rounded-lg bg-white dark:bg-[#1C2434] p-[2px]">
                 <LuUsers className="text-lg text-sky-500 dark:text-white" />
               </div>

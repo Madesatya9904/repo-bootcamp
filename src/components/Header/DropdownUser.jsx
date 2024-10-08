@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 const DropdownUser = () => {
@@ -13,19 +13,18 @@ const DropdownUser = () => {
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const token = Cookies.get("currentUser");
-    // Redirect to signin if no token
+
     if (!token) {
       router.push("/auth/signin");
       return;
     }
 
-    // Fetch user data from API
     try {
       const response = await axios.get("/api/auth/sign-in", {
         headers: {
-          Authorization: `${token}`, // Ensure Bearer token format
+          Authorization: `${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -34,15 +33,18 @@ const DropdownUser = () => {
         router.push("/auth/signin");
         return;
       }
-      setUserData(response.data); // Store user data
+
+      setUserData(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [router]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   // Close on click outside
   useEffect(() => {
