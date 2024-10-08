@@ -109,7 +109,7 @@ export default function Table({ categories }) {
           Data Categories ( {countCategories} )
         </h4>
         <div className="flex flex-col items-end">
-          <Link href="/product/create">
+          <Link href="/category/create">
             <button className="rounded-md bg-[#3B82F6] px-2 py-1 text-white">
               Add Category
             </button>
