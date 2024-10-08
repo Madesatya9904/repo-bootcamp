@@ -102,7 +102,7 @@ const Form = ({ user }) => {
           },
         );
 
-        setNotification(`Product has been update`);
+        setNotification(`Users has been update`);
         setNotificationType("update");
 
         setTimeout(() => setNotification(null), 3000);
@@ -125,7 +125,7 @@ const Form = ({ user }) => {
         setTimeout(() => setNotification(null), 3000);
       }
 
-      router.push("/user");
+      router.push("/");
       router.refresh();
     } catch (error) {
       console.log(error);

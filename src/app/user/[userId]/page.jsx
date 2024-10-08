@@ -4,6 +4,13 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { db } from "@/lib/db";
 import Form from "../_components/form";
+export const metadata = {
+  icons: {
+    icon: "/logoicon/logo1.png"
+  },
+  title: "User",
+  description: "This is Next.js User's Admin Panel",
+};
 
 const Page = async({ params }) => {
   const users = await db.user.findFirst({
@@ -23,7 +30,7 @@ const Page = async({ params }) => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Product" />
+      <Breadcrumb pageName="User" />
       <Form user={
         {
           ...users,

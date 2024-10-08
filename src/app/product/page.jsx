@@ -4,9 +4,11 @@ import { db } from "@/lib/db";
 import Table from "@/app/product/_components/table";
 
 export const metadata = {
-  title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
+  icons: {
+    icon: "/logoicon/logo1.png"
+  },
+  title: "Product",
+  description: "This is Next.js Product's Admin Panel",
 };
 
 export default async function ProductPage() {

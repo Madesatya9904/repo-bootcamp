@@ -3,16 +3,48 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
-  const [user, setUser] = useState("Admin");
+  const [userData, setUserData] = useState(null);
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
-  // close on click outside
+  const fetchData = async () => {
+    const token = Cookies.get("currentUser");
+    // Redirect to signin if no token
+    if (!token) {
+      router.push("/auth/signin");
+      return;
+    }
+
+    // Fetch user data from API
+    try {
+      const response = await axios.get("/api/auth/sign-in", {
+        headers: {
+          Authorization: `${token}`, // Ensure Bearer token format
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 401) {
+        router.push("/auth/signin");
+        return;
+      }
+      setUserData(response.data); // Store user data
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
       if (!dropdown.current) return;
@@ -26,9 +58,9 @@ const DropdownUser = () => {
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  });
+  }, [dropdownOpen]);
 
-  // close if the esc key is pressed
+  // Close on escape key
   useEffect(() => {
     const keyHandler = ({ keyCode }) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -36,12 +68,12 @@ const DropdownUser = () => {
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
-  });
+  }, [dropdownOpen]);
 
-  function handleLogout() {
+  const handleLogout = () => {
     Cookies.remove("currentUser");
     router.push("/auth/signin");
-  }
+  };
 
   return (
     <div className="relative">
@@ -52,10 +84,10 @@ const DropdownUser = () => {
         href="#"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
-            {user}
+          <span className="block text-sm font-medium text-black dark:text-white max-w-[60px] overflow-hidden text-ellipsis whitespace-nowrap">
+            {userData?.name}
           </span>
-          <span className="block text-xs capitalize">{user}</span>
+          <span className="block text-xs capitalize max-w-[60px] overflow-hidden text-ellipsis whitespace-nowrap">{userData?.email}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -88,13 +120,11 @@ const DropdownUser = () => {
         </svg>
       </Link>
 
-      {/* <!-- Dropdown Start --> */}
+      {/* Dropdown */}
       <div
         ref={dropdown}
-        onFocus={() => setDropdownOpen(true)}
-        onBlur={() => setDropdownOpen(false)}
         className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
-          dropdownOpen === true ? "block" : "hidden"
+          dropdownOpen ? "block" : "hidden"
         }`}
       >
         <button
@@ -114,14 +144,13 @@ const DropdownUser = () => {
               fill=""
             />
             <path
-              d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
+              d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.42501 15.4 7.90626 15.4 8.21564 15.0906C8.52501 14.7813 8.52501 14.3 8.21564 13.9906L6.05001 11.7563Z"
               fill=""
             />
           </svg>
           Log Out
         </button>
       </div>
-      {/* <!-- Dropdown End --> */}
     </div>
   );
 };

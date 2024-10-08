@@ -4,9 +4,11 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { db } from "@/lib/db";
 
 export const metadata = {
-  title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
+  icons: {
+    icon: "/logoicon/logo1.png"
+  },
+  title: "Category",
+  description: "This is Next.js Category Admin Panel",
 };
 
 export default async function CategoryPage() {

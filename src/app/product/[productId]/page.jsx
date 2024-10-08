@@ -4,6 +4,13 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { db } from "@/lib/db";
 import Form from "../_components/form";
+export const metadata = {
+  icons: {
+    icon: "/logoicon/logo1.png"
+  },
+  title: "Product",
+  description: "This is Next.js Product's Admin Panel",
+};
 
 const Page = async({ params }) => {
   const product = await db.tumbler.findFirst({
@@ -17,7 +24,6 @@ const Page = async({ params }) => {
   if (!product) {
     return (
       <DefaultLayout>
-        <Breadcrumb pageName="Product" />
         <div>Product not found</div>
       </DefaultLayout>
     );
@@ -25,7 +31,6 @@ const Page = async({ params }) => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Product" />
       <Form product={product} categories={categories} />
     </DefaultLayout>
   );

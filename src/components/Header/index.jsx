@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import DropdownUser from "./DropdownUser";
+import logo1 from "../../../public/logoicon/logo1.png";
 
 const Header = (props) => {
   return (
@@ -52,12 +53,9 @@ const Header = (props) => {
           {/* <!-- Hamburger Toggle BTN --> */}
 
           <Link className="block flex-shrink-0 lg:hidden" href="/">
-            <Image
-              width={32}
-              height={32}
-              src={"/images/logo/logo-icon.svg"}
-              alt="Logo"
-            />
+            <button>
+              <Image width={32} height={32} src={logo1} alt="Logo" />
+            </button>
           </Link>
         </div>
 

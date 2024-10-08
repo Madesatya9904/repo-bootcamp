@@ -65,7 +65,13 @@ export default function Table({ categories }) {
     }
   };
 
-  const countCategories = categories.length;
+  const [filterSearchTerm, setFilterSearchTerm] = useState("")
+
+  const filterCategory = categories.filter((category) => (
+    category.name.toLowerCase().includes(filterSearchTerm.toLowerCase())
+  ))
+
+  const countCategories = filterCategory.length;
 
   return (
     <div className="">
@@ -98,16 +104,26 @@ export default function Table({ categories }) {
         </div>
       )}
 
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex justify-between">
         <h4 className="text-xl font-semibold text-black dark:text-white">
           Data Categories ( {countCategories} )
         </h4>
-        <Link href="/category/create">
-          <button className="rounded-md bg-[#3B82F6] px-2 py-1 text-white">
-            Add Category
-          </button>
-        </Link>
+        <div className="flex flex-col items-end">
+          <Link href="/product/create">
+            <button className="rounded-md bg-[#3B82F6] px-2 py-1 text-white">
+              Add Category
+            </button>
+          </Link>
+          <input
+            className="border-gray-400 mb-2 mt-2 w-[12.9rem] border-b-2 bg-transparent transition-all duration-300 focus:border-blue-600 focus:outline-none"
+            type="text"
+            placeholder="Search by category name"
+            value={filterSearchTerm}
+            onChange={(e) => setFilterSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
+      <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
           <tr className="text-left text-black dark:text-white">
@@ -118,64 +134,72 @@ export default function Table({ categories }) {
           </tr>
         </thead>
         <tbody>
-          {categories.map((category, key) => (
-            <tr key={key} className=" border-b border-black dark:border-white">
-              <td className="pl-3">
-                <div className="mb-2 mt-2 max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">
-                  {category.id}
-                </div>
-              </td>
-              <td className="pl-3">
-                <div className="mb-2 mt-2 max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">
-                  {category.name}
-                </div>
-              </td>
-              <td className="pl-3">
-                <div className="mb-2 mt-2 max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">
-                  {category.created_at.toDateString()}
-                </div>
-              </td>
-              <td className="pl-3">
-                <div className="text-blue-500 ">
-                  <div className="flex flex-row justify-center gap-3">
-                    <Link href={`/category/${category.id}`}>
-                      <FaEdit className="w-4 cursor-pointer" />
-                    </Link>
-                    <MdDeleteOutline
-                      onClick={() => openModal(category)}
-                      className="w-4 cursor-pointer"
-                    />
+          {filterCategory.length > 0 ? (
+            filterCategory.map((category, key) => (
+              <tr key={key} className=" border-b border-black dark:border-white">
+                <td className="pl-3">
+                  <div className="mb-2 mt-2 max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">
+                    {category.id}
                   </div>
-                </div>
-              </td>
-            </tr>
-          ))}
+                </td>
+                <td className="pl-3">
+                  <div className="mb-2 mt-2 max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">
+                    {category.name}
+                  </div>
+                </td>
+                <td className="pl-3">
+                  <div className="mb-2 mt-2 max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">
+                    {category.created_at.toDateString()}
+                  </div>
+                </td>
+                <td className="pl-3">
+                  <div className="text-blue-500 ">
+                    <div className="flex flex-row justify-center gap-3">
+                      <Link href={`/category/${category.id}`}>
+                        <FaEdit className="w-4 cursor-pointer" />
+                      </Link>
+                      <MdDeleteOutline
+                        onClick={() => openModal(category)}
+                        className="w-4 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <div className="flex h-fit flex-col items-center justify-center">
+              <h3>404</h3>
+              <p className="text-center">User Not Found</p>
+            </div>
+          )}
         </tbody>
       </table>
+      </div>
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-1/3 rounded-md bg-white p-6 shadow-md">
-            <h2 className="mb-4 text-xl font-semibold">Delete User</h2>
-            <p>
-              Are you sure you want to delete the category{" "}
-              <b>{selectedCategoryId.name}</b>?
-            </p>
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={closeModal}
-                className="bg-gray-500 mr-2 rounded-md px-4 py-2 text-black"
-              >
-                Close
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="bg-red-500 rounded-md px-4 py-2 text-black"
-              >
-                {isLoading ? "Deleting..." : "Confirm"}
-              </button>
-            </div>
+        <div className="w-full max-w-md rounded-md bg-white p-6 shadow-md">
+          <h2 className="mb-4 text-xl font-semibold">Delete User</h2>
+          <p>
+            Are you sure you want to delete the Category{" "}
+            <b>{selectedCategoryId.name}</b>?
+          </p>
+          <div className="mt-4 flex justify-end">
+            <button
+              onClick={closeModal}
+              className="bg-gray-500 mr-2 rounded-md px-4 py-2 text-black"
+            >
+              Close
+            </button>
+            <button
+              onClick={confirmDelete}
+              className="bg-red-500 rounded-md px-4 py-2 text-black"
+            >
+              {isLoading ? "Deleting..." : "Confirm"}
+            </button>
           </div>
         </div>
+      </div>
       )}
 
       {categories.length === 0 && (

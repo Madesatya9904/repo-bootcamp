@@ -53,4 +53,39 @@ export async function POST(req, res) {
 
     return new NextResponse("Internal Server Error", { status: 500 });
   }
+
+}
+
+export async function GET(req) {
+  try {
+    // Ambil token dari header Authorization
+    const token = req.headers.get('Authorization');
+
+    if (!token) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    // Verifikasi token dengan JWT
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
+
+    // Ambil data user dari database berdasarkan ID dari token
+    const user = await db.user.findUnique({
+      where: {
+        id: decoded.id, // ID berasal dari token
+      },
+    });
+
+    if (!user) {
+      return new NextResponse("User not found", { status: 404 });
+    }
+
+    // Hapus password dan access_token dari response
+    const { password, access_token, ...userData } = user;
+
+    // Kembalikan data user
+    return NextResponse.json(userData);
+  } catch (err) {
+    console.error("Error:", err);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
 }

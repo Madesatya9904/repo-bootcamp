@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import logo1 from "../../../public/logoicon/logo1.png"
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const pathname = usePathname();
@@ -61,14 +62,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-        <Link href="/">
+        {/* ngatur image  */}
+        <Link className="flex items-center" href="/">
           <Image
-            width={176}
-            height={32}
-            src={"/images/logo/logo.svg"}
+            className="w-20"
+            src={logo1}
             alt="Logo"
             priority
           />
+          <span className="text-xl">Admin Panel</span>
         </Link>
 
         <button
@@ -97,7 +99,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         {/* <!-- Sidebar Menu --> */}
-        <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
+        <nav className="px-4 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
