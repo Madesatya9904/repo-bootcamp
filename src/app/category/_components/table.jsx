@@ -33,7 +33,7 @@ export default function Table({ categories }) {
   async function handleDelete(id) {
     try {
       setIsLoading(true);
-      const response = await axios.delete(`/api/category/${id}`, {
+      await axios.delete(`/api/category/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,

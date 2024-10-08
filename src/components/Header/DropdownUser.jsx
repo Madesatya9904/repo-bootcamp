@@ -8,6 +8,7 @@ import axios from "axios";
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
+  const [loading, setLoading] = useState(true); 
   const [userData, setUserData] = useState(null);
 
   const trigger = useRef(null);

@@ -97,7 +97,7 @@ export async function DELETE(req, { params }) {
       }
     })
 
-    return NextResponse.json("Category deleted",deleteCategory, {status: 200})
+    return NextResponse.json({ message: "Category deleted" }, { status: 200 });
   } catch (error) {
     return new NextResponse("Internal server error", { status: error.status})
   }
