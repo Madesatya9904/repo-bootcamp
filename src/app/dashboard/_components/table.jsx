@@ -19,7 +19,7 @@ const Page = ({ categories, products, orders, users }) => {
   const [copyTextUserEmail, setCopyTextUserEmail] = useState();
   const router = useRouter();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const token = Cookies.get("currentUser");
 
     if (!token) {
@@ -46,11 +46,11 @@ const Page = ({ categories, products, orders, users }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   if (loading) {
     return <p>Loading...</p>;
