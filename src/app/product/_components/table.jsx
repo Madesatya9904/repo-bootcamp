@@ -156,7 +156,8 @@ export default function Table({ tumbler }) {
                 </td>
                 <td className="pl-3">
                   <p className="mb-2 mt-2 max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">
-                    {product.category.name}
+                  {product.category ? product.category.name : 'No category'}
+
                   </p>
                 </td>
                 <td className="pl-3">
