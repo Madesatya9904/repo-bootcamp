@@ -120,6 +120,7 @@ export async function DELETE(req, { params }) {
     })
     return new NextResponse("Delete Product", { status: 200 })
   } catch (error) {
+    console.log(error)
     return new NextResponse("Internal Server Error", { status: error.status })
   }
 }

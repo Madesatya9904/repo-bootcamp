@@ -54,7 +54,7 @@ model OrderItems {
   quantity   Int
   color      String
 
-  tumbler Tumbler @relation(fields: [tumbler_id], references: [id])
+  tumbler Tumbler @relation(fields: [tumbler_id], references: [id], onDelete: Cascade)
   order   Order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
 
   created_at DateTime @default(now())
