@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../../lib/db.js";
 import jwt from "jsonwebtoken";
+import { hashSync } from "bcrypt";
 
 export async function GET(req, { params }) {
   try {
@@ -58,7 +59,7 @@ export async function PATCH(req, { params }) {
       data: {
         name,
         email,
-        password,
+        password: hashSync(password,10),
         access_token,
         role,
       },

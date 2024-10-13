@@ -137,7 +137,7 @@ export default function Form({ product, categories }) {
             },
           },
         );
-        setNotification(`User has been update`);
+        setNotification(`Product has been update`);
         setNotificationType("update");
 
         setTimeout(() => setNotification(null), 3000);

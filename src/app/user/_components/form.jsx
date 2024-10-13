@@ -47,6 +47,7 @@ const Form = ({ user }) => {
       setValidationForm(""); // menghapus error saat memulai ketik
     }
   }
+  console.log(form)
 
   const handleToggle = () => {
     if (type === "password") {
@@ -102,7 +103,7 @@ const Form = ({ user }) => {
           },
         );
 
-        setNotification(`Product has been update`);
+        setNotification(`Users has been update`);
         setNotificationType("update");
 
         setTimeout(() => setNotification(null), 3000);
