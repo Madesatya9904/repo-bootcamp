@@ -108,6 +108,7 @@ export async function DELETE(req, { params }) {
       where: {
         id: params.productId
       }
+      
     })
     if (!productId) {
       return new NextResponse("Category not found", { status: 404 })

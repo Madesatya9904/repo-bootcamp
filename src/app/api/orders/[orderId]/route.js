@@ -16,9 +16,6 @@ export async function GET(req, { params }) {
         id: decoded.id
       }
     })
-    // if (user.role !== "ADMIN") {
-    //   return new NextResponse("You are not Administrator", { status: 403 })
-    // }
 
     const order = await db.order.findFirst({
       where: {

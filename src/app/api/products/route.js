@@ -41,7 +41,9 @@ export async function POST(req) {
         price,
         desc,
         type,
-        images
+        images,
+        shipping: false, // Set default value for shipping
+        featured: false, // Set default value for featured
       }
     });
 

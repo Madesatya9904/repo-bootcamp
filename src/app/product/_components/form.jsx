@@ -24,6 +24,8 @@ export default function Form({ product, categories }) {
     validBrand: "",
     validStock: "",
     validImage: "",
+    validShipping: "",
+    validFeatured: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState(
@@ -44,11 +46,20 @@ export default function Form({ product, categories }) {
   );
 
   function handleOnChange(e) {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
 
+    // Mengonversi nilai ke boolean jika nama field adalah featured atau shipping
+    const newValue =
+      name === "featured" || name === "shipping"
+        ? e.target.value === "true"
+        : value;
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: newValue,
+    }));
+
+    // Validasi jika nilai input ada
     if (e.target.value) {
       setValidationForm("");
     }
@@ -94,6 +105,24 @@ export default function Form({ product, categories }) {
       setValidationForm((prev) => ({
         ...prev,
         validStock: "Stock cannot be empty and must be a number",
+      }));
+      setIsLoading(false);
+      return;
+    }
+    if (form.featured === undefined) {
+      // Check if not selected
+      setValidationForm((prev) => ({
+        ...prev,
+        validFeatured: "Please select if it's featured",
+      }));
+      setIsLoading(false);
+      return;
+    }
+    if (form.shipping === undefined) {
+      // Check if not selected
+      setValidationForm((prev) => ({
+        ...prev,
+        validShipping: "Please select if it's featured",
       }));
       setIsLoading(false);
       return;
@@ -237,6 +266,7 @@ export default function Form({ product, categories }) {
       color: newColors,
     });
   }
+  console.log("handle change :", form);
 
   return (
     <div>
@@ -254,7 +284,7 @@ export default function Form({ product, categories }) {
               `}
           >
             {notificationType === "create" ? (
-              <IoCreateOutline  className="text-3xl" />
+              <IoCreateOutline className="text-3xl" />
             ) : notificationType === "update" ? (
               <MdUpdate className="text-3xl" />
             ) : (
@@ -420,6 +450,9 @@ export default function Form({ product, categories }) {
                           : "bg-white"
                       }`}
                     >
+                      <option value="" className="text-body dark:text-bodydark">
+                        Select
+                      </option>
                       <option
                         value={true}
                         className="text-body dark:text-bodydark"
@@ -433,6 +466,11 @@ export default function Form({ product, categories }) {
                         No
                       </option>
                     </select>
+                    {validationForm.validFeatured && (
+                      <p className="text-sm text-rose-600">
+                        {validationForm.validFeatured}
+                      </p>
+                    )}
                   </div>
 
                   <div className="w-full xl:w-1/2">
@@ -450,8 +488,11 @@ export default function Form({ product, categories }) {
                           : "bg-white"
                       }`}
                     >
+                      <option value="" className="text-body dark:text-bodydark">
+                        Select
+                      </option>
                       <option
-                        value={"true"}
+                        value={true}
                         className="text-body dark:text-bodydark"
                       >
                         Yes
@@ -463,6 +504,11 @@ export default function Form({ product, categories }) {
                         No
                       </option>
                     </select>
+                    {validationForm.validShipping && (
+                      <p className="text-sm text-rose-600">
+                        {validationForm.validShipping}
+                      </p>
+                    )}
                   </div>
                 </div>
 
