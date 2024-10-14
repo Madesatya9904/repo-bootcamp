@@ -19,7 +19,7 @@ export async function POST(req) {
     if (user.role !== "ADMIN") {
       return new NextResponse("You are not Administrator", { status: 403 })
     }
-    const { name, category_id, brand, stock, color, price, desc, type, images } = await req.json();
+    const { name, category_id, brand, stock, color, price, desc, type, images, shipping, featured } = await req.json();
 
     // Validate that the category exists
     const category = await db.category.findFirst({
@@ -42,8 +42,8 @@ export async function POST(req) {
         desc,
         type,
         images,
-        shipping: false, // Set default value for shipping
-        featured: false, // Set default value for featured
+        shipping, // Set default value for shipping
+        featured, // Set default value for featured
       }
     });
 

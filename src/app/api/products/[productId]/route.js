@@ -40,7 +40,7 @@ export async function PATCH(req, { params }) {
     if (user.role !== "ADMIN") {
       return new NextResponse("You are not Administrator", { status: 403 })
     }
-    const { name, categoryId, brand, stock, images, color, price, desc, type } = await req.json();
+    const { name, categoryId, brand, stock, images, color, price, desc, type, shipping, featured } = await req.json();
     //untuk mencari id category
     const category = await db.category.findFirst({
       where: { 
@@ -75,6 +75,8 @@ export async function PATCH(req, { params }) {
         price: price,
         desc: desc,
         type: type,
+        shipping,
+        featured,
         images
       }
     })
@@ -107,6 +109,9 @@ export async function DELETE(req, { params }) {
     const productId = await db.tumbler.findFirst({
       where: {
         id: params.productId
+      },
+      include: {
+        order_items: true
       }
       
     })
@@ -119,6 +124,15 @@ export async function DELETE(req, { params }) {
         id: params.productId
       }
     })
+
+    // if (productId.order_items.length > 0) {
+    //   await db.order.delete({
+    //     where: {
+    //       id: productId.order_items[0].order_id
+    //     }
+    //   })
+    // }
+    
     return new NextResponse("Delete Product", { status: 200 })
   } catch (error) {
     console.log(error)
